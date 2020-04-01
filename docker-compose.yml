@@ -1,0 +1,29 @@
+version: '3'
+services:
+    php:
+        image: php:7.2-fpm
+        container_name: lemp-php
+        volumes:
+            - './app:/var/www/html'
+        ports:
+            - "9000:9000"
+    nginx:
+        image: nginx:latest
+        container_name: lemp-nginx
+        ports:
+            - '80:80'
+            - '443:443'
+        links:
+            - 'php'
+        volumes:
+            - ./app:/var/www/html
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    mariadb:
+        image: mariadb:latest
+        container_name: lemp-mariaDB
+        volumes:
+            - ./database:/var/lib/mysql:rw
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=654321
